@@ -62,9 +62,9 @@ if($http->post('register')) {
 		if($_SERVER['REMOTE_ADDR'] == "127.0.0.1" || $loguser['root'])
 			$ipKnown = 0;
 
-		if (stripos(in_array($cemail, $emaildomainsblock)) !== FALSE)
+		if (stripos(in_array($cemail, $emaildomainsblock)) !== FALSE) {
 			$err = __('An unknown error occured, please try again.');
-			Report("A vistor from [b]".$_SERVER['REMOTE_ADDR']."[/] tried to use a blocked email", 1);
+			Report("A vistor from [b]".$_SERVER['REMOTE_ADDR']."[/] tried to use a blocked email", 1); }
 		if (!$cname)
 			$err = __('Enter a username and try again.');
 		if ($uname == $cname)
