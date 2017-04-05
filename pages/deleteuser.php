@@ -98,6 +98,9 @@ if ($userdeleteperms && $user["primarygroup"] < 1 && $user["primarygroup"] > 0 &
 			//Delete THE USER ITSELF
 			query("delete from {users}
 					where id={0}", $uid);
+			
+			//Log it
+			Report("[b]".$user["name"]."[/] was deleted from the database", 1);
 
 			//and then IP BAN HIM
 			query("insert into {ipbans} (ip, reason, date) 
