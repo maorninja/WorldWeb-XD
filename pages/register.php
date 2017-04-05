@@ -64,12 +64,14 @@ if($http->post('register')) {
 
 		if (stripos(in_array($cemail, $emaildomainsblock)) !== FALSE)
 			$err = __('An unknown error occured, please try again.');
+			Report("A vistor from [b]".$_SERVER['REMOTE_ADDR']."[/] tried to use a blocked email", 1);
 		if (!$cname)
 			$err = __('Enter a username and try again.');
 		if ($uname == $cname)
 			$err = __("This user name is already taken by someone else. Please choose another one.");
 		if ($ipKnown >= 1)
 			$err = __("You already have an account.");
+			Report("A user from [b]".$_SERVER['REMOTE_ADDR']."[/] tried to reregister", 1);
 		if (!$http->post('readFaq'))
 			$err = format(__("You really should {0}read the FAQ{1}&hellip;"), "<a href=\"".actionLink("faq")."\">", "</a>");
 		if (!$http->post('pass')) //Yes, I know that it should be common sence that you need to enter a password and that the "Less than 8 characters" thing exist, but its actually better to show the user what he's doing wrong. Other than to act blind to him.
@@ -84,6 +86,7 @@ if($http->post('register')) {
 			$err = __("You need to specify an email. Please specify one, and try again.");
 		if ($http->post('botprot'))
 			$err = __("An unknown error occured, please try again.");
+			Report("A robot from [b]".$_SERVER['REMOTE_ADDR']."[/] tried to register", 1);
 		if ($uemail == $cemail)
 			$err = __("You already have an account.");
 		if (!filter_var($cemail, FILTER_VALIDATE_EMAIL))
@@ -92,14 +95,18 @@ if($http->post('register')) {
 			$err = __("Don't put your username as your password. You'll impose high security risk to your account");
 		if (!$http->post('math') && Settings::get('math'))
 			$err = __("You forgot to answer the math question.");
+			Report("A vistor from [b]".$_SERVER['REMOTE_ADDR']."[/] did not do the math challenge", 1);
 		if ($http->post('math') !== "11")
 			$err = __("Wrong Math Answer. Please try again.");
+			Report("A vistor from [b]".$_SERVER['REMOTE_ADDR']."[/] failed the math challenge", 1);
 		if (!$http->post('KeyWord') && Settings::get("RegWordKey") !== "")
 			$err = __("You forgot to enter the Registration Word Key. Please try again. Remeber that you have to contact the admin, in order to recieve it.");
 		if ($http->post('KeyWord') !== Settings::get("RegWordKey"))
 			$err = __("You entered the wrong registration key. Please try again, but this time, with the right Registration Key. Remember that you have to obtain this key from a admin.");
+			Report("A vistor from [b]".$_SERVER['REMOTE_ADDR']."[/] tried to register with the word [b]".$http->post('KeyWord')."[/].", 1);
 		if (strlen($cname)>20)
 			$err = __("The maximum limit for usernames are 20 characters. Please try again, but this time, with a shorter username");
+			Report("A vistor from [b]".$_SERVER['REMOTE_ADDR']."[/] tried to use the username [b]".$cname."[/], but it was too long", 1);
 
 		if($haveSecurimage) {
 			include("securimage/securimage.php");
